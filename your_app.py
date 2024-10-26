@@ -74,13 +74,13 @@ app.layout = html.Div(children=[
         ),
         
         html.Label("Cramps"),
-        dcc.Slider(id='cramps', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}, style={'margin-bottom': '20px'}),
+        dcc.Slider(id='cramps', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}),
         
         html.Label("Acne"),
-        dcc.Slider(id='acne', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}, style={'margin-bottom': '20px'}),
+        dcc.Slider(id='acne', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}),
         
         html.Label("Stress Level"),
-        dcc.Slider(id='stress', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}, style={'margin-bottom': '20px'}),
+        dcc.Slider(id='stress', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}),
         
         html.Label("Exercise"),
         dcc.Checklist(id='exercise', options=[{'label': 'Exercise', 'value': 'True'}], value=[], style={'margin-bottom': '10px'})
