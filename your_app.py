@@ -4,6 +4,7 @@ import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 import pandas as pd
 import dash_table
+import datetime
 
 # Create a Dash app instance
 app = dash.Dash(__name__)
@@ -18,10 +19,10 @@ app.layout = html.Div(children=[
     
     html.Div([
         html.Label("Date (DD-MM-YYYY)"),
-        dcc.Input(id='date', type='text', placeholder='Enter date'),
+        dcc.Input(id='date', type='text', value=datetime.datetime.now().strftime('%d-%m-%Y'), placeholder='Enter date'),
         
         html.Label("Day of Cycle"),
-        dcc.Input(id='day_of_cycle', type='number', placeholder='Enter day of cycle'),
+        dcc.Input(id='day_of_cycle', type='number', placeholder='Enter day of cycle', value=1 if cycle_data.empty else (datetime.datetime.now() - pd.to_datetime(cycle_data.iloc[0]['Date'], format='%d-%m-%Y')).days + 1),
         
         html.Label("Note"),
         dcc.Input(id='note', type='text', placeholder='Enter note'),
@@ -85,5 +86,3 @@ def update_table(n_clicks, date, day_of_cycle, note, sex, bleeding, fluid, cramp
 # Run the server
 if __name__ == '__main__':
     app.run_server(debug=True, host='0.0.0.0')
-
-
