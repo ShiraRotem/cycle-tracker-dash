@@ -108,9 +108,7 @@ app.layout = html.Div(children=[
     
     # Section 5: Presumed Ovulation and Pregnancy Test
     html.Div([
-        dcc.Checklist(id='presumed_ovulation', options=[{'label': 'Presumed Ovulation', 'value': 'True'}], value=[], style={'margin-bottom': '10px'})
-        
-        html.Label("Pregnancy Test"),
+        dcc.Checklist(id='presumed_ovulation', options=[{'label': 'Presumed Ovulation', 'value': 'True'}], value=[], style={'margin-bottom': '10px'}),
         dcc.Dropdown(
             id='pregnancy_test',
             options=[
