@@ -33,7 +33,7 @@ app.layout = html.Div(children=[
         dcc.Input(id='note', type='text', placeholder='Enter note', style={'margin-bottom': '10px', 'width': '100%'})
     ], style={'margin-bottom': '20px', 'padding': '10px', 'border': '1px solid #ccc', 'border-radius': '5px'}),
     
-    # Section 3: Sex, Bleeding, Fluid, Cramps, Acne, Stress Level, and Exercise
+    # Section 3: Sex, Bleeding, Fluid, Cramps, Acne, Stress Level, Mood, and Exercise
     html.Div([
         html.Label("Sex"),
         html.Div([
@@ -81,6 +81,18 @@ app.layout = html.Div(children=[
         
         html.Label("Stress Level"),
         dcc.Slider(id='stress', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}),
+        
+        html.Label("Mood"),
+        dcc.Dropdown(
+            id='mood',
+            options=[
+                {'label': 'Happy 😊', 'value': 'Happy'},
+                {'label': 'Sad 😢', 'value': 'Sad'},
+                {'label': 'Angry 😠', 'value': 'Angry'}
+            ],
+            placeholder='Select mood',
+            style={'margin-bottom': '10px', 'width': '100%'}
+        ),
         
         html.Label("Exercise"),
         dcc.Checklist(id='exercise', options=[{'label': 'Exercise', 'value': 'True'}], value=[], style={'margin-bottom': '10px'})
