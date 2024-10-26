@@ -35,11 +35,10 @@ app.layout = html.Div(children=[
     
     # Section 3: Sex, Bleeding, Fluid, Cramps, Acne, Stress Level, Mood, and Exercise
     html.Div([
-        html.Label("Sex"),
         html.Div([
-            dcc.Checklist(
-                id='sex_toggle',
-                options=[{'label': 'Enable Sex Selection', 'value': 'True'}],
+        dcc.Checklist(
+            id='sex_toggle',
+            options=[{'label': 'Sex', 'value': 'True'}],
                 value=[],
                 style={'display': 'inline-block', 'margin-right': '10px'}
             ),
@@ -109,8 +108,7 @@ app.layout = html.Div(children=[
     
     # Section 5: Presumed Ovulation and Pregnancy Test
     html.Div([
-        html.Label("Presumed Ovulation"),
-        dcc.Checklist(id='presumed_ovulation', options=[{'label': 'Presumed Ovulation', 'value': 'True'}], value=[], style={'margin-bottom': '10px'}),
+        dcc.Checklist(id='presumed_ovulation', options=[{'label': 'Presumed Ovulation', 'value': 'True'}], value=[], style={'margin-bottom': '10px'})
         
         html.Label("Pregnancy Test"),
         dcc.Dropdown(
@@ -188,7 +186,7 @@ def update_table(n_clicks, date, day_of_cycle, note, sex, bleeding, fluid, cramp
             "Pregnancy Test": pregnancy_test
         }
         global cycle_data
-        cycle_data = cycle_data.append(new_entry, ignore_index=True)
+        cycle_data = pd.concat([cycle_data, pd.DataFrame([new_entry])], ignore_index=True)
     return cycle_data.to_dict('records')
 
 # Run the server
