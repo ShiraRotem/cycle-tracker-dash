@@ -1,9 +1,9 @@
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 from dash.dependencies import Input, Output, State
 import pandas as pd
-import dash_table
+from dash import dash_table
 import datetime
 
 # Create a Dash app instance
@@ -58,7 +58,7 @@ app.layout = html.Div(children=[
         ], style={'margin-bottom': '10px', 'width': '100%'}),
         
         html.Label("Bleeding"),
-        dcc.Slider(id='bleeding', min=0, max=4, step=1, value=0, marks={i: str(i) for i in range(5)}, tooltip={'always_visible': True}, style={'margin-bottom': '20px'}),
+        dcc.Slider(id='bleeding', min=0, max=4, step=1, value=0, marks={i: str(i) for i in range(5)}, tooltip={'always_visible': True}),
         
         html.Label("Fluid"),
         dcc.Dropdown(
