@@ -10,12 +10,13 @@ import datetime
 app = dash.Dash(__name__)
 
 # Initialize cycle data storage
-data_columns = ["Date", "Day of Cycle", "Note", "Sex", "Bleeding", "Fluid", "Cramps", "Mood"]
+data_columns = ["Date", "Day of Cycle", "Note", "Sex", "Bleeding", "Fluid", "Cramps", "Mood", "Acne", "Stress Level", "Presumed Ovulation", "Sleep Duration", "Weight", "Exercise", "Pregnancy Test"]
 cycle_data = pd.DataFrame(columns=data_columns)
 
 # Define the layout of the app
 app.layout = html.Div(children=[
-    html.H1("Menstrual Cycle Tracker"),
+    html.H1("Cycle Tracker"),
+    html.H3("Insert Data"),
     
     html.Div([
         html.Label("Date (DD-MM-YYYY)"),
@@ -28,21 +29,77 @@ app.layout = html.Div(children=[
         dcc.Input(id='note', type='text', placeholder='Enter note'),
         
         html.Label("Sex"),
-        dcc.Input(id='sex', type='text', placeholder='Enter sex method'),
+        dcc.Dropdown(
+            id='sex',
+            options=[
+                {'label': 'Unprotected', 'value': 'Unprotected'},
+                {'label': 'Condom', 'value': 'Condom'},
+                {'label': 'Withdrawal', 'value': 'Withdrawal'},
+                {'label': 'Other', 'value': 'Other'}
+            ],
+            value='Other'
+        ),
         
-        html.Label("Bleeding (0-4)"),
-        dcc.Input(id='bleeding', type='number', placeholder='Enter bleeding level'),
+        html.Label("Bleeding"),
+        dcc.Slider(id='bleeding', min=0, max=4, step=1, value=0, marks={i: str(i) for i in range(5)}, tooltip={'always_visible': True}),
         
         html.Label("Fluid"),
-        dcc.Input(id='fluid', type='text', placeholder='Enter fluid type'),
+        dcc.Dropdown(
+            id='fluid',
+            options=[
+                {'label': 'Baseline', 'value': 'Baseline'},
+                {'label': 'Fertile', 'value': 'Fertile'},
+                {'label': 'Super Fertile', 'value': 'Super Fertile'},
+                {'label': 'Dry', 'value': 'Dry'}
+            ],
+            placeholder='Select fluid type'
+        ),
         
-        html.Label("Cramps (0-3)"),
-        dcc.Input(id='cramps', type='number', placeholder='Enter cramps level'),
+        html.Label("Cramps"),
+        dcc.Slider(id='cramps', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}),
         
         html.Label("Mood"),
-        dcc.Input(id='mood', type='text', placeholder='Enter mood'),
+        dcc.Dropdown(
+            id='mood',
+            options=[
+                {'label': 'Happy 😊', 'value': 'Happy'},
+                {'label': 'Sad 😢', 'value': 'Sad'},
+                {'label': 'Angry 😠', 'value': 'Angry'}
+            ],
+            placeholder='Select mood'
+        ),
         
-        html.Button('Add Entry', id='add_entry', n_clicks=0)
+        html.Label("Acne"),
+        dcc.Slider(id='acne', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}),
+        
+        html.Label("Stress Level"),
+        dcc.Slider(id='stress', min=0, max=3, step=1, value=0, marks={i: str(i) for i in range(4)}, tooltip={'always_visible': True}),
+        
+        html.Label("Presumed Ovulation"),
+        dcc.Checklist(id='presumed_ovulation', options=[{'label': 'Presumed Ovulation', 'value': 'True'}]),
+        
+        html.Label("Sleep Duration"),
+        dcc.Input(id='sleep_duration', type='text', placeholder='Enter sleep duration'),
+        
+        html.Label("Weight"),
+        dcc.Input(id='weight', type='text', placeholder='Enter weight'),
+        
+        html.Label("Exercise"),
+        dcc.Checklist(id='exercise', options=[{'label': 'Exercise', 'value': 'True'}]),
+        
+        html.Label("Pregnancy Test"),
+        dcc.Dropdown(
+            id='pregnancy_test',
+            options=[
+                {'label': 'Positive', 'value': 'Positive'},
+                {'label': 'Negative', 'value': 'Negative'},
+                {'label': 'Other', 'value': 'Other'}
+            ],
+            placeholder='Select result'
+        ),
+        
+        html.Button('Save Data', id='save_data', n_clicks=0),
+        html.Button('Cycles', id='view_cycles', n_clicks=0)
     ], style={'margin-bottom': '20px'}),
     
     html.H2("Cycle Data"),
@@ -57,7 +114,7 @@ app.layout = html.Div(children=[
 # Callback to add data to the table
 @app.callback(
     Output('cycle_table', 'data'),
-    Input('add_entry', 'n_clicks'),
+    Input('save_data', 'n_clicks'),
     [State('date', 'value'),
      State('day_of_cycle', 'value'),
      State('note', 'value'),
@@ -65,10 +122,17 @@ app.layout = html.Div(children=[
      State('bleeding', 'value'),
      State('fluid', 'value'),
      State('cramps', 'value'),
-     State('mood', 'value')]
+     State('mood', 'value'),
+     State('acne', 'value'),
+     State('stress', 'value'),
+     State('presumed_ovulation', 'value'),
+     State('sleep_duration', 'value'),
+     State('weight', 'value'),
+     State('exercise', 'value'),
+     State('pregnancy_test', 'value')]
 )
-def update_table(n_clicks, date, day_of_cycle, note, sex, bleeding, fluid, cramps, mood):
-    if n_clicks > 0 and all([date, day_of_cycle, note, sex, bleeding, fluid, cramps, mood]):
+def update_table(n_clicks, date, day_of_cycle, note, sex, bleeding, fluid, cramps, mood, acne, stress, presumed_ovulation, sleep_duration, weight, exercise, pregnancy_test):
+    if n_clicks > 0:
         new_entry = {
             "Date": date,
             "Day of Cycle": day_of_cycle,
@@ -77,7 +141,14 @@ def update_table(n_clicks, date, day_of_cycle, note, sex, bleeding, fluid, cramp
             "Bleeding": bleeding,
             "Fluid": fluid,
             "Cramps": cramps,
-            "Mood": mood
+            "Mood": mood,
+            "Acne": acne,
+            "Stress Level": stress,
+            "Presumed Ovulation": 'Yes' if presumed_ovulation else 'No',
+            "Sleep Duration": sleep_duration,
+            "Weight": weight,
+            "Exercise": 'Yes' if exercise else 'No',
+            "Pregnancy Test": pregnancy_test
         }
         global cycle_data
         cycle_data = cycle_data.append(new_entry, ignore_index=True)
